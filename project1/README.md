@@ -1,10 +1,14 @@
 ### crust.py
 
-**Purpose:** `crust.py` reconstructs planar curves from a 2D point cloud using the Crust algorithm (via Delaunay triangulation on lifted points).
+**Purpose:** `crust.py` reconstructs planar curves from a 2D point cloud using the Crust algorithm (via Delaunay triangulation on lifted points). Beyond what was asked in the task, this implementation also provides the visualization of the algorithm output.
 
 **How to run:**
 
 ```bash
+pip install -r requirements.txt
+
+cd project1
+
 python crust.py input_points.txt output_edges.txt
 ```
 * input_points.txt — text file with one sample point per line: x y

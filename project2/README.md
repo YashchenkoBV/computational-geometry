@@ -5,4 +5,8 @@
 **How to run:**
 
 ```bash
+pip install -r requirements.txt
+
+cd project2
+
 python cocone.py
