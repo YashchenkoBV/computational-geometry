@@ -216,8 +216,8 @@ def intersection_check(triangle: Triangle, vertex_idx: int, triangle_vertices_in
 candidate_triangles = {}
 
 for t_idx, trg in triangles.items():
-    # t_idx is a tuple of 3 vertex indices of the triangle
-    # The triangle is accepted only if it passes the cocone
+    # t_idx is a tuple of 3 vertex indices of the triangle,
+    # which is accepted only if it passes the cocone
     # intersection test at all three of its vertices.
     ok = True
     for v_idx in t_idx:

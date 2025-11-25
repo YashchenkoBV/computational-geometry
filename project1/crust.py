@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.spatial import ConvexHull
 import matplotlib.pyplot as plt
+import sys
 
 
 def delaunay(points):
@@ -21,8 +22,35 @@ def delaunay(points):
     # As per the lecture, each facet has equation a*x + b*y + c*z + d <= 0 for hull interior.
     # The algorithm asks to filter out the upper hull
     # Thus, keep only facets with c < 0
-    lower_facets = np.where(hull.equations[:, 2] < 0)[0]
-    triangles = hull.simplices[lower_facets]
+    simplices = hull.simplices
+
+    # A point guaranteed to be strictly inside the hull (for orientation)
+    centroid = points_3d.mean(axis=0)
+
+    lower_indices = []
+
+    for idx, (i, j, k) in enumerate(simplices):
+        P = points_3d[i]
+        Q = points_3d[j]
+        R = points_3d[k]
+
+        # Normal vector of the plane through P,Q,R:
+        # n = (Q-P) × (R-P)
+        n = np.cross(Q - P, R - P)
+        A, B, C = n  # plane coefficients for x,y,z
+        D = -np.dot(n, P)  # so that A*Px + B*Py + C*Pz + D = 0
+
+        # Check the centroid; if it's on the >0 side, flip the plane.
+        if np.dot(centroid, n) + D > 0:
+            A, B, C, D = -A, -B, -C, -D
+
+        # For points on the convex paraboloid, facets whose outward
+        # normal points *down* (C < 0) are the LOWER hull facets.
+        if C < 0:
+            lower_indices.append(idx)
+
+    lower_indices = np.array(lower_indices, dtype=int)
+    triangles = simplices[lower_indices]
     return triangles
 
 
@@ -95,12 +123,19 @@ def crust(points):
 
 
 def main():
-    points = np.loadtxt("points.txt")
+    if len(sys.argv) != 3:
+        print("Usage: python crust.py input_points.txt output_edges.txt")
+        return
+    in_path, out_path = sys.argv[1], sys.argv[2]
+
+    points = np.loadtxt(in_path)
+    edges = crust(points)
 
     # Output
-    edges = crust(points)
-    for i, j in edges:
-        print(i, j)
+    with open(out_path, "w") as f:
+        for i, j in edges:
+            f.write(f"{i} {j}\n")
+            print(f"{i} {j}")
 
     # Visualization
     plt.figure(figsize=(5, 5))
