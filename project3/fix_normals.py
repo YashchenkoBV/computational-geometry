@@ -15,10 +15,6 @@ import sys
 import numpy as np
 
 
-# ----------------------------------------------------------------------
-# OFF / NOFF I/O
-# ----------------------------------------------------------------------
-
 def read_off(path):
     """Read OFF or NOFF; ignore any normals in the input."""
     with open(path, "r") as f:
@@ -133,11 +129,6 @@ def orient_faces_locally(faces):
     """
     Use BFS to make triangle orientations locally consistent
     across manifold edges.
-
-    Returns
-    -------
-    faces_oriented : list[(i,j,k)]
-    comp_id        : list[int] with connected-component ids per face.
     """
     n_faces = len(faces)
     neighbors = build_manifold_adjacency(faces)
@@ -254,10 +245,6 @@ def compute_vertex_normals(vertices, faces):
 
     return normals
 
-
-# ----------------------------------------------------------------------
-# Main
-# ----------------------------------------------------------------------
 
 def main(argv):
     if len(argv) != 3:
