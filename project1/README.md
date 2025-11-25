@@ -5,6 +5,7 @@
 **How to run:**
 
 ```bash
+pip install -r requirements.txt
 python crust.py input_points.txt output_edges.txt
 ```
 * input_points.txt — text file with one sample point per line: x y
